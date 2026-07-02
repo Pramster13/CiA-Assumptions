@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CiA Live Assumptions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100vh;}
+body{
+  font-family:'Inter',ui-sans-serif,sans-serif;
+  background:#08090c;
+  color:#eef0f6;
+  font-size:14px;
+  line-height:1.5;
+}
+header{
+  background:#0d1018;
+  border-bottom:1px solid #1e2433;
+  padding:18px 28px;
+  position:sticky;
+  top:0;
+  z-index:9999;
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.logo{display:flex;align-items:center;gap:8px;}
+.logo-dot{width:9px;height:9px;background:#f5c400;border-radius:50%;box-shadow:0 0 8px #f5c400;}
+.logo-text{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#f5c400;}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.badge{font-size:11px;padding:3px 10px;border-radius:999px;border:1px solid #252c3a;color:#606880;background:#13161e;}
+.home-btn{
+  display:none;
+  font-size:12px;font-weight:700;
+  padding:6px 14px;border-radius:999px;
+  background:#f5c400;color:#0a0800;
+  border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;
+}
+.home-btn.vis{display:inline-flex;align-items:center;gap:5px;}
+.view{display:none;}
+.view.on{display:block;}
+main{max-width:1100px;margin:0 auto;padding:32px 24px 80px;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+.stat{background:#13161e;border:1px solid #1e2433;border-radius:12px;padding:18px;text-align:center;}
+.stat .val{font-size:22px;font-weight:700;color:#f5c400;line-height:1;margin-bottom:4px;}
+.stat .lbl{font-size:11px;color:#606880;text-transform:uppercase;letter-spacing:.07em;}
+
+/* TILES */
+.tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.tile{
+  background:#13161e;border:1px solid #1e2433;border-radius:12px;
+  padding:20px 18px;cursor:pointer;
+  transition:border-color .18s,background .18s;
+  position:relative;
+}
+.tile:hover{border-color:#f5c400;background:#181c26;}
+.tile-icon{font-size:20px;color:#f5c400;margin-bottom:10px;}
+.tile-title{font-size:14px;font-weight:600;color:#eef0f6;margin-bottom:5px;}
+.tile-desc{font-size:12px;color:#9aa3b8;line-height:1.45;}
+
+/* CARDS */
+.card{background:#13161e;border:1px solid #1e2433;border-radius:12px;padding:18px 20px;margin-bottom:12px;}
+.card h3{font-size:13px;font-weight:600;color:#eef0f6;margin-bottom:10px;}
+
+/* SECTION LABELS */
+.sec-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#f5c400;margin-bottom:6px;}
+.sec-title{font-size:20px;font-weight:700;color:#eef0f6;margin-bottom:20px;}
+
+/* SPLIT */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+
+/* OWN LABELS */
+.own-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.own-label.t1{color:#f5c400;}
+.own-label.cust{color:#13c4d8;}
+.own-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.t1 .own-dot{background:#f5c400;}
+.cust .own-dot{background:#13c4d8;}
+
+/* BULLET LIST */
+ul.blist{list-style:none;display:flex;flex-direction:column;gap:7px;}
+ul.blist li{font-size:13px;color:#9aa3b8;padding-left:16px;position:relative;line-height:1.45;}
+ul.blist li::before{content:'·';position:absolute;left:0;color:#303849;}
+ul.blist li.ok::before{content:'✓';color:#3dd68c;}
+ul.blist li.warn::before{content:'!';color:#f5a623;font-weight:700;}
+ul.blist li.ex::before{content:'✕';color:#ff6060;}
+
+/* TAG ROW */
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.tag{font-size:11px;padding:3px 10px;border-radius:999px;border:1px solid #252c3a;color:#606880;background:#1a1f2b;}
+.tag.in{background:rgba(61,214,140,.1);border-color:rgba(61,214,140,.28);color:#3dd68c;}
+.tag.out{background:rgba(255,96,96,.1);border-color:rgba(255,96,96,.28);color:#ff6060;}
+
+/* STEPS */
+.step{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start;}
+.step-num{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(245,196,0,.1);border:1px solid rgba(245,196,0,.3);
+  color:#f5c400;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.step-body{font-size:13px;color:#9aa3b8;line-height:1.45;}
+.step-body strong{color:#eef0f6;font-weight:600;display:block;margin-bottom:2px;}
+.deadline{
+  display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;
+  background:rgba(245,166,35,.1);color:#f5a623;border:1px solid rgba(245,166,35,.3);margin-top:4px;
+}
+
+/* DIVIDER */
+.divider{height:1px;background:#1e2433;margin:16px 0;}
+
+/* RISKS */
+.risk{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid #1e2433;margin-bottom:8px;background:#13161e;}
+.risk.high{border-color:rgba(255,96,96,.4);background:rgba(255,96,96,.07);}
+.risk.med{border-color:rgba(245,166,35,.4);background:rgba(245,166,35,.07);}
+.risk.ok{border-color:rgba(61,214,140,.4);background:rgba(61,214,140,.07);}
+.risk-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.risk.high .risk-icon{color:#ff6060;}
+.risk.med .risk-icon{color:#f5a623;}
+.risk.ok .risk-icon{color:#3dd68c;}
+.risk-body strong{font-size:13px;font-weight:600;color:#eef0f6;display:block;margin-bottom:3px;}
+.risk-body span{font-size:12px;color:#9aa3b8;}
+
+/* GATES */
+.gate{border:1px solid #1e2433;border-radius:12px;padding:12px 14px;margin-bottom:8px;background:#13161e;}
+.gate-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.gate-name{font-size:13px;font-weight:600;color:#eef0f6;}
+.gate-desc{font-size:12px;color:#9aa3b8;}
+.owner-pill{font-size:11px;padding:2px 10px;border-radius:999px;font-weight:600;}
+.owner-pill.t1{background:rgba(245,196,0,.12);color:#f5c400;border:1px solid rgba(245,196,0,.3);}
+.owner-pill.cust{background:rgba(19,196,216,.12);color:#13c4d8;border:1px solid rgba(19,196,216,.3);}
+.owner-pill.joint{background:#1e2433;color:#9aa3b8;border:1px solid #252c3a;}
+
+/* PURPOSE CARD */
+.purpose-card{background:#13161e;border:1px solid #1e2433;border-radius:12px;padding:18px 20px;}
+.purpose-card h3{font-size:13px;font-weight:600;color:#9aa3b8;margin-bottom:10px;text-transform:uppercase;letter-spacing:.07em;}
+
+@media(max-width:700px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .tile-grid,.split{grid-template-columns:1fr;}
+  header{padding:14px 16px;}
+  main{padding:20px 16px 48px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    <span class="logo-text">CiA Live Assumptions</span>
+  </div>
+  <div class="hdr-right">
+    <span class="badge">CES · July 2026</span>
+    <span class="badge">ISO 9001 · ISO 27001</span>
+    <button class="home-btn" id="homeBtn" onclick="goHome()">← Home</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <div class="view on" id="v-home">
+    <div style="margin-bottom:24px;">
+      <div class="sec-eyebrow">CiA Transition · PM Draft</div>
+      <div style="font-size:26px;font-weight:700;color:#eef0f6;margin-bottom:6px;">CiA Live Assumptions</div>
+      <div style="font-size:13px;color:#9aa3b8;">Patrick Kearney · Associate Director, Transitions · Core Enterprise Suite (CES)</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="val">CES</div><div class="lbl">Scope</div></div>
+      <div class="stat"><div class="val">4–6 mo</div><div class="lbl">Typical duration</div></div>
+      <div class="stat"><div class="val">4 wks</div><div class="lbl">Min. SaaS live</div></div>
+      <div class="stat"><div class="val">12 mo</div><div class="lbl">ETL / CPM lookback</div></div>
+    </div>
+
+    <div class="tile-grid">
+      <div class="tile" onclick="go('scope')">
+        <div class="tile-icon"><i class="ti ti-list-check"></i></div>
+        <div class="tile-title">Scope</div>
+        <div class="tile-desc">What's in, what's excluded, and who owns what.</div>
+      </div>
+      <div class="tile" onclick="go('schedule')">
+        <div class="tile-icon"><i class="ti ti-calendar-event"></i></div>
+        <div class="tile-title">Schedule</div>
+        <div class="tile-desc">Prerequisites, timelines, and mobilisation.</div>
+      </div>
+      <div class="tile" onclick="go('migration')">
+        <div class="tile-icon"><i class="ti ti-database-export"></i></div>
+        <div class="tile-title">Migration</div>
+        <div class="tile-desc">Responsibilities, UAT, access, and roles.</div>
+      </div>
+      <div class="tile" onclick="go('change')">
+        <div class="tile-icon"><i class="ti ti-git-branch"></i></div>
+        <div class="tile-title">Change Control</div>
+        <div class="tile-desc">Variations, delays, costs, and rescheduling.</div>
+      </div>
+      <div class="tile" onclick="go('other')">
+        <div class="tile-icon"><i class="ti ti-settings"></i></div>
+        <div class="tile-title">Other Provisions</div>
+        <div class="tile-desc">Travel, training, integration, governance, OCM.</div>
+      </div>
+      <div class="tile" onclick="go('risks')">
+        <div class="tile-icon"><i class="ti ti-alert-triangle"></i></div>
+        <div class="tile-title">Risks &amp; Gates</div>
+        <div class="tile-desc">Key risks and acceptance criteria by gate.</div>
+      </div>
+    </div>
+
+    <div class="purpose-card">
+      <h3>Purpose of this document</h3>
+      <ul class="blist">
+        <li>Defines the assumptions underpinning planning, preparation and execution of a CiA Live transition</li>
+        <li>Sets the baseline for delivery. Both TechnologyOne and the customer rely on this throughout the project.</li>
+        <li>Any variation must be agreed in writing by both parties and may result in changes to scope, cost, or timeline</li>
+        <li>Applies only to the Core Enterprise Suite (CES) component of the CiA Live Migration</li>
+        <li>Should be read in conjunction with the CiA Live Migration Approach (CES) document</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SCOPE -->
+  <div class="view" id="v-scope">
+    <div class="sec-eyebrow">Section 1</div>
+    <div class="sec-title">Scope</div>
+    <div class="card">
+      <h3>What is in scope</h3>
+      <div class="tag-row">
+        <span class="tag in">Licensed modules per Contract</span>
+        <span class="tag in">As-is Ci footprint → CiA</span>
+        <span class="tag in">ETLs (last 12 months)</span>
+        <span class="tag in">XLOne reports &amp; schedules (last 12 months)</span>
+        <span class="tag in">BI portlets &amp; dashboards (last 12 months)</span>
+        <span class="tag in">Enquiries (last 12 months)</span>
+        <span class="tag in">Standard CiA roles and base roles</span>
+      </div>
+      <p style="font-size:12px;color:#606880;">Where functionality has been reimagined in CiA, equivalent outcomes may be delivered through alternative features or approaches.</p>
+    </div>
+    <div class="card">
+      <h3>Explicitly excluded from scope</h3>
+      <ul class="blist">
+        <li class="ex">CiA capabilities already migrated by the customer or a third party</li>
+        <li class="ex">New features, products or modules</li>
+        <li class="ex">Changes to existing configuration or customisations</li>
+        <li class="ex">Integration with third-party systems or services</li>
+        <li class="ex">Application management or business administration services</li>
+        <li class="ex">Regression testing for application updates</li>
+        <li class="ex">Stored Scripts</li>
+        <li class="ex">Documents greater than 2,000 lines</li>
+        <li class="ex">DECOM scripts (format field validation)</li>
+        <li class="ex">SBR1 to SBR2 move</li>
+        <li class="ex">Multi-doc files with PO or Contract fields</li>
+        <li class="ex">Doc Ref 2 duplicate checking (Expense Management)</li>
+        <li class="ex">Unsupported workflow fields on entity definitions</li>
+        <li class="ex">Rework of migration activities unless T1 failed agreed requirements</li>
+      </ul>
+    </div>
+    <div class="split">
+      <div class="card">
+        <div class="own-label t1"><span class="own-dot"></span>TechnologyOne</div>
+        <ul class="blist">
+          <li class="ok">Deliver migration per standard CiA Live Approach</li>
+          <li class="ok">Provide standard roles and base roles</li>
+          <li class="ok">Remote delivery of all services</li>
+          <li class="ok">Document improvements for separate post-project delivery</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="own-label cust"><span class="own-dot"></span>Customer</div>
+        <ul class="blist">
+          <li class="warn">Provide accurate and complete information</li>
+          <li class="warn">Manage organisational change and user readiness</li>
+          <li class="warn">Complete UAT and validate all migrated artefacts</li>
+          <li class="warn">Provide access, resources and system admin support</li>
+          <li class="warn">Provide suitably skilled and available resources throughout</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="view" id="v-schedule">
+    <div class="sec-eyebrow">Section 2</div>
+    <div class="sec-title">Schedule</div>
+    <div class="card">
+      <h3>Prerequisites before CiA Live start date</h3>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Live on SaaS platform</strong>Customer must be fully live on the SaaS platform before the project commences.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>Production environment established</strong>Must have been running for a minimum of 4 weeks.<span class="deadline">Min. 4 weeks</span></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Current supported software release</strong>Production must be on a current, supported release prior to start.</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Duration guidance</h3>
+      <ul class="blist">
+        <li class="ok">Simple complexity: typically 4 to 6 months for CES migration</li>
+        <li>Simple means limited products, few CPM items, minimal variation from standard CiA</li>
+        <li class="warn">Complex environments with more products, integrations, or CPM items will extend beyond this range</li>
+        <li>Final duration confirmed after Discovery Stage completion and environment validation</li>
+        <li>Property and Rating migrations are planned separately and commence after CES migration completes.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Mobilisation and governance</h3>
+      <ul class="blist">
+        <li>A mobilisation period is required from Contract Start Date for T1 to allocate resources</li>
+        <li>Mobilisation re-applies if the project is paused and subsequently restarted</li>
+        <li class="warn">T1 confirms the allocated migration slot only once mobilisation is complete</li>
+        <li class="warn">Customer must formally review and approve the Migration Plan before execution begins</li>
+        <li class="warn">If Customer activities are delayed, T1 may proceed to subsequent stages. Any impacts will be managed via Change Control.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MIGRATION -->
+  <div class="view" id="v-migration">
+    <div class="sec-eyebrow">Section 3</div>
+    <div class="sec-title">Migration stage</div>
+    <div class="split">
+      <div class="card">
+        <div class="own-label t1"><span class="own-dot"></span>TechnologyOne</div>
+        <ul class="blist">
+          <li class="ok">Deliver migration per agreed Project Plan</li>
+          <li class="ok">Provide standard CiA Live roles and base roles</li>
+          <li class="ok">Progress to next stages if Customer activities are not completed in time</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="own-label cust"><span class="own-dot"></span>Customer</div>
+        <ul class="blist">
+          <li class="warn">Complete all migration and testing activities within agreed timeframes</li>
+          <li class="warn">Complete UAT on all migrated items</li>
+          <li class="warn">System Administrator assigns roles to users</li>
+          <li class="warn">SMEs validate access during UAT</li>
+          <li class="warn">Confirm end users have appropriate access before completion</li>
+          <li class="warn">Actively participate and confirm readiness to progress at each stage</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h3>UAT requirements</h3>
+      <ul class="blist">
+        <li class="warn">Customer is responsible for UAT on all migrated items</li>
+        <li>Covers module functionality, reports, integrations, workflows, and analytics</li>
+        <li class="warn">Must be completed within the agreed timeframe to maintain the schedule</li>
+        <li>Extensions subject to resource availability and managed via Change Control</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Access management</h3>
+      <ul class="blist">
+        <li class="ok">T1 provides standard roles and base roles within the provisioned environment</li>
+        <li class="warn">Customer System Administrator assigns roles to users</li>
+        <li class="warn">Customer SMEs validate access as part of UAT</li>
+        <li class="warn">Customer confirms end users have appropriate access prior to completion</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CHANGE CONTROL -->
+  <div class="view" id="v-change">
+    <div class="sec-eyebrow">Section 4</div>
+    <div class="sec-title">Change control</div>
+    <div class="card">
+      <h3>How change control works</h3>
+      <ul class="blist">
+        <li>Any variation to scope, schedule, or assumptions managed via Project Change Control Procedure</li>
+        <li class="warn">All changes must be formally raised, assessed, and agreed in writing before implementation</li>
+        <li>Applies to changes requested by either Customer or TechnologyOne</li>
+        <li>May result in adjustments to cost, timeline, or resource requirements</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Customer obligations</h3>
+      <ul class="blist">
+        <li class="warn">Provide resources and complete activities within agreed timeframes</li>
+        <li class="warn">Supply accurate and timely information throughout the project</li>
+        <li class="warn">Cooperate and provide reasonable assistance including timely review of deliverables, participation in governance activities, and responses to information requests.</li>
+        <li>If obligations are not met, impacts are managed via the Change Control Procedure</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Costs and delays</h3>
+      <ul class="blist">
+        <li class="warn">If the project is delayed, paused, or extended for reasons not caused by T1, additional costs may apply.</li>
+        <li>Includes extended environment access and additional consulting or project management effort</li>
+        <li>T1 standard daily rates per Contract apply to all approved additional work</li>
+        <li class="warn">Rescheduling or cancellation requires sufficient notice. Where notice is insufficient, T1 may recover committed resource time in line with the Contract.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- OTHER PROVISIONS -->
+  <div class="view" id="v-other">
+    <div class="sec-eyebrow">Section 5</div>
+    <div class="sec-title">Other provisions</div>
+    <div class="split">
+      <div class="card">
+        <h3>Travel</h3>
+        <ul class="blist">
+          <li class="ok">All services delivered remotely by default</li>
+          <li class="warn">Where on-site services are agreed, the customer is responsible for travel expenses including airfares and accommodation.</li>
+          <li>Travel time may be chargeable where contract thresholds are exceeded</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Training</h3>
+        <ul class="blist">
+          <li class="ok">Primarily self-directed via T1 University and Customer Community</li>
+          <li class="ok">Each product includes a handover session of up to half a day following migration.</li>
+          <li class="warn">Handover sessions are not formal training and not intended for broad OCM activities</li>
+          <li class="warn">Customer responsible for end-user readiness, adoption and training</li>
+          <li>Additional formal training available via time and materials through Change Control</li>
+        </ul>
+      </div>
+    </div>
+    <div class="split">
+      <div class="card">
+        <h3>Integration</h3>
+        <ul class="blist">
+          <li class="warn">Customer responsible for all integration activities including third-party engagement</li>
+          <li>T1 only provides integration support where explicitly included in the Approach or agreed via Change Control</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Project governance</h3>
+        <ul class="blist">
+          <li class="warn">Customer provides an experienced PM to work jointly with the T1 PM</li>
+          <li class="warn">Customer PM coordinates resources and ensures timely task completion</li>
+          <li class="ok">Governance includes regular status reporting, agreed meeting cadence, and documented outcomes</li>
+          <li>Additional governance requirements agreed during the Plan stage</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Organisational change management</h3>
+      <ul class="blist">
+        <li class="warn">The customer is fully responsible for organisational change management including stakeholder engagement, communication, and end-user readiness.</li>
+        <li class="ex">OCM activities are not included within the scope of TechnologyOne services</li>
+      </ul>
+      <div class="divider"></div>
+      <h3 style="margin-bottom:10px;">General provisions</h3>
+      <ul class="blist">
+        <li>Defect resolution managed through standard support and maintenance arrangements</li>
+        <li>Project environments are provisioned for the duration defined in the Project Plan and are restricted to CiA Live activities only.</li>
+        <li>Standard shipped configuration used for roles, workplaces, and new modules unless otherwise agreed</li>
+        <li class="warn">Customer maintains any required third-party software licences</li>
+        <li>Migration tooling intended for desktop use and may have usage limitations</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RISKS & GATES -->
+  <div class="view" id="v-risks">
+    <div class="sec-eyebrow">Section 6</div>
+    <div class="sec-title">Risks &amp; acceptance gates</div>
+    <div class="risk high">
+      <div class="risk-icon"><i class="ti ti-alert-circle"></i></div>
+      <div class="risk-body"><strong>Production changes after scope sign-off</strong><span>Any post-sign-off changes are out of scope and must be redone after go-live at customer cost. A Production change freeze is strongly recommended.</span></div>
+    </div>
+    <div class="risk high">
+      <div class="risk-icon"><i class="ti ti-alert-circle"></i></div>
+      <div class="risk-body"><strong>Customer resource availability</strong><span>Delivery depends on suitably skilled and available customer resources. Delays may cause T1 to proceed to subsequent stages. Any impacts will be managed via Change Control.</span></div>
+    </div>
+    <div class="risk med">
+      <div class="risk-icon"><i class="ti ti-alert-triangle"></i></div>
+      <div class="risk-body"><strong>Integration responsibility gap</strong><span>All integrations with third-party systems are customer-owned. Insufficient planning is a frequent cause of project delays.</span></div>
+    </div>
+    <div class="risk med">
+      <div class="risk-icon"><i class="ti ti-alert-triangle"></i></div>
+      <div class="risk-body"><strong>Unsupported Ci functionality</strong><span>Stored Scripts, documents over 2,000 lines, DECOM scripts, SBR1–SBR2, and others are explicitly out of scope and will not migrate.</span></div>
+    </div>
+    <div class="risk med">
+      <div class="risk-icon"><i class="ti ti-alert-triangle"></i></div>
+      <div class="risk-body"><strong>Project pauses and restarts</strong><span>Mobilisation re-applies if the project is paused and restarted. Additional costs may apply for extended environment access and effort.</span></div>
+    </div>
+    <div class="risk ok">
+      <div class="risk-icon"><i class="ti ti-circle-check"></i></div>
+      <div class="risk-body"><strong>Training and training and support</strong><span>T1 University, Customer Community, and per-product handover sessions are available to support the customer. Formal OCM and end-user training remain the responsibility of the customer.</span></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#606880;margin-bottom:14px;">Acceptance gates</div>
+    <div class="gate">
+      <div class="gate-top"><span class="gate-name">Prerequisites met</span><span class="owner-pill joint">Joint</span></div>
+      <div class="gate-desc">SaaS live 4+ weeks, current supported release, Migration Plan formally approved before execution begins.</div>
+    </div>
+    <div class="gate">
+      <div class="gate-top"><span class="gate-name">Discovery complete</span><span class="owner-pill t1">T1-led</span></div>
+      <div class="gate-desc">Scope confirmed via Discovery Stage, environment validated, duration refined and agreed by both parties.</div>
+    </div>
+    <div class="gate">
+      <div class="gate-top"><span class="gate-name">Migration completed</span><span class="owner-pill t1">T1-led</span></div>
+      <div class="gate-desc">Documented evidence of migration completion including integration and access management.</div>
+    </div>
+    <div class="gate">
+      <div class="gate-top"><span class="gate-name">UAT sign-off</span><span class="owner-pill cust">Customer</span></div>
+      <div class="gate-desc">Successful UAT on all migrated items including functionality, reports, integrations, workflows, and analytics, completed within the agreed timeframe.</div>
+    </div>
+    <div class="gate">
+      <div class="gate-top"><span class="gate-name">Access validated</span><span class="owner-pill cust">Customer</span></div>
+      <div class="gate-desc">Customer SMEs confirm all end users have appropriate access prior to project completion.</div>
+    </div>
+    <div class="gate">
+      <div class="gate-top"><span class="gate-name">Go-live ready</span><span class="owner-pill cust">Customer</span></div>
+      <div class="gate-desc">Business readiness confirmed. Customer responsible for OCM, end-user training, and stakeholder engagement.</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function go(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v-'+id).classList.add('on');
+  document.getElementById('homeBtn').classList.add('vis');
+  window.scrollTo({top:0,behavior:'auto'});
+}
+function goHome(){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v-home').classList.add('on');
+  document.getElementById('homeBtn').classList.remove('vis');
+  window.scrollTo({top:0,behavior:'auto'});
+}
+</script>
+</body>
+</html>
